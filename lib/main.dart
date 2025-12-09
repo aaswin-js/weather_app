@@ -14,7 +14,7 @@ class Myapp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(
         useMaterial3: true,
-      ), //.copyWith(appBarTheme: AppBarTheme(backgroundColor: Colors.amber)),
+      ), 
       home: const WeatherScreen(),
     );
   }

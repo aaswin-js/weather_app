@@ -47,7 +47,14 @@ class _WeatherScreenState extends State<WeatherScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.refresh))],
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {});
+            },
+            icon: Icon(Icons.refresh),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: getCurrentWeather(),
@@ -61,7 +68,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
           }
-          
+
           final data = snapshot.data!;
 
           final currentdata = data["list"][0];
@@ -70,15 +77,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
           final currentWind = currentdata["wind"]["speed"];
           final currentPressure = currentdata['main']["pressure"];
           final currentHumidity = currentdata['main']['humidity'];
-          print(currentHumidity);
-          
-
-
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 //main card
                 SizedBox(
@@ -86,8 +90,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   child: Card(
                     elevation: 10,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(15),
                     ),
+
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: BackdropFilter.grouped(
@@ -108,9 +113,18 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 ),
                               ),
                               SizedBox(height: 16),
-                              Icon( currentWeather== "Clouds" || currentWeather == "Rain" ? Icons.cloud : Icons.sunny, size: 64),
+                              Icon(
+                                currentWeather == "Clouds" ||
+                                        currentWeather == "Rain"
+                                    ? Icons.cloud
+                                    : Icons.sunny,
+                                size: 64,
+                              ),
                               SizedBox(height: 16),
-                              Text(currentWeather, style: TextStyle(fontSize: 32)),
+                              Text(
+                                currentWeather,
+                                style: TextStyle(fontSize: 32),
+                              ),
                             ],
                           ),
                         ),
@@ -118,10 +132,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ),
                   ),
                 ),
+
                 SizedBox(height: 20),
                 //Weather Forcast
-                Text("Weather Forcast", style: TextStyle(fontSize: 24)),
+                Text("Weather Forcast", style: TextStyle(fontSize: 24),),
                 SizedBox(height: 16),
+
                 // SingleChildScrollView(
                 //   scrollDirection: Axis.horizontal,
                 //   child: Row(
@@ -135,23 +151,30 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 //     ],
                 //   ),
                 // ),
-
+             
                 SizedBox(
                   height: 120,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: 5,
-                    itemBuilder: (context, index){
-                      final time = DateTime.parse(data["list"][index+1]['dt_txt']);
-
+                    itemBuilder: (context, index) {
+                      final time = DateTime.parse(
+                        data["list"][index + 1]['dt_txt'],
+                      );
+                      final weather = data['list'][index + 1];
                       return HourlyForcastItem(
-                        
-                        icon: data['list'][index+1]['weather'][0]["main"] == "Clouds" || data['list'][index+1]['weather'][0]["main"] == "Rain" ? Icons.cloud : Icons.sunny,
+                        icon:
+                            weather['weather'][0]["main"] ==
+                                    "Clouds" ||
+                                weather['weather'][0]["main"] ==
+                                    "Rain"
+                            ? Icons.cloud
+                            : Icons.sunny,
 
-                        
-                        time:DateFormat.j().format(time),
-                        temperature: data["list"][index+1]['main']['temp'].toString(),
-                        );
+                        time: DateFormat.j().format(time),
+                        temperature: data["list"][index + 1]['main']['temp']
+                            .toString(),
+                      );
                     },
                   ),
                 ),
@@ -181,7 +204,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ),
                   ],
                 ),
-              ],
+              ],              
             ),
           );
         },
